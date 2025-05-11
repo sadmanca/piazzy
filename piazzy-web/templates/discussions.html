@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Discussions</title>
+</head>
+<body>
+    <h2>Discussions</h2>
+    <ul>
+    {% for post in posts %}
+        <li>
+            <a href="{{ url_for('view_post', nid=nid, cid=post['id']) }}">
+                <strong>{{ post['history'][0]['subject'] if post['history'] and post['history'][0]['subject'] else 'No Subject' }}</strong>
+            </a><br>
+            <div>{{ post['history'][0]['content']|safe }}</div>
+            <small>Type: {{ post['type'] }}, Created: {{ post['created'] }}</small>
+        </li>
+    {% endfor %}
+    </ul>
+    <a href="{{ url_for('courses') }}">Back to Courses</a>
+</body>
+</html>

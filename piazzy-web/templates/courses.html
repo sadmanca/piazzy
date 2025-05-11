@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Courses</title>
+</head>
+<body>
+    <h2>Your Courses</h2>
+    <ul>
+    {% for course in courses %}
+        <li><a href="{{ url_for('course_discussions', nid=course['nid']) }}">{{ course['name'] }} ({{ course['term'] }})</a></li>
+    {% endfor %}
+    </ul>
+    <a href="{{ url_for('login') }}">Logout</a>
+</body>
+</html>

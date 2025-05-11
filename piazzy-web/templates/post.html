@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Post Details</title>
+</head>
+<body>
+    <h2>{{ post['history'][0]['subject'] if post['history'] and post['history'][0]['subject'] else 'No Subject' }}</h2>
+    <div><strong>Body:</strong> {{ post['history'][0]['content']|safe }}</div>
+    <div><strong>Type:</strong> {{ post['type'] }}</div>
+    <div><strong>Created:</strong> {{ post['created'] }}</div>
+    <hr>
+    {% if post.get('children') %}
+        <h3>Followups & Replies</h3>
+        <ul>
+        {% for followup in post['children'] %}
+            <li>
+                <div><strong>Followup:</strong> {{ followup['subject']|safe }}</div>
+                <div><strong>By:</strong> {{ followup.get('uid', 'Unknown') }}</div>
+                <div><strong>Created:</strong> {{ followup.get('created', '') }}</div>
+                {% if followup.get('children') %}
+                    <ul>
+                    {% for reply in followup['children'] %}
+                        <li>
+                            <div><strong>Reply:</strong> {{ reply['subject']|safe }}</div>
+                            <div><strong>By:</strong> {{ reply.get('uid', 'Unknown') }}</div>
+                            <div><strong>Created:</strong> {{ reply.get('created', '') }}</div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+    <hr>
+    {% if post.get('children') %}
+        <h3>Answers</h3>
+    {% endif %}
+    {% if post.get('children') %}
+        {% for child in post['children'] %}
+            {% if child['type'] == 'i_answer' %}
+                <div><strong>Instructor Answer:</strong> {{ child['subject']|safe }}</div>
+            {% elif child['type'] == 's_answer' %}
+                <div><strong>Student Answer:</strong> {{ child['subject']|safe }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <a href="{{ url_for('course_discussions', nid=post.get('nid', '') ) }}">Back to Discussions</a>
+</body>
+</html>
